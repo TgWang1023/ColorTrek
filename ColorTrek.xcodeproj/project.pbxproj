@@ -15,6 +15,11 @@
 		B4C8D3542161CD9600AAEBD1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4C8D3522161CD9600AAEBD1 /* Main.storyboard */; };
 		B4C8D3562161CD9700AAEBD1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B4C8D3552161CD9700AAEBD1 /* Assets.xcassets */; };
 		B4C8D3592161CD9700AAEBD1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4C8D3572161CD9700AAEBD1 /* LaunchScreen.storyboard */; };
+		B4C8D3662161CE3200AAEBD1 /* powerUp.wav in Resources */ = {isa = PBXBuildFile; fileRef = B4C8D3612161CE3200AAEBD1 /* powerUp.wav */; };
+		B4C8D3672161CE3200AAEBD1 /* move.wav in Resources */ = {isa = PBXBuildFile; fileRef = B4C8D3622161CE3200AAEBD1 /* move.wav */; };
+		B4C8D3682161CE3200AAEBD1 /* levelCompleted.wav in Resources */ = {isa = PBXBuildFile; fileRef = B4C8D3632161CE3200AAEBD1 /* levelCompleted.wav */; };
+		B4C8D3692161CE3200AAEBD1 /* fail.wav in Resources */ = {isa = PBXBuildFile; fileRef = B4C8D3642161CE3200AAEBD1 /* fail.wav */; };
+		B4C8D36A2161CE3200AAEBD1 /* levelUp.wav in Resources */ = {isa = PBXBuildFile; fileRef = B4C8D3652161CE3200AAEBD1 /* levelUp.wav */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +33,11 @@
 		B4C8D3552161CD9700AAEBD1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B4C8D3582161CD9700AAEBD1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B4C8D35A2161CD9700AAEBD1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B4C8D3612161CE3200AAEBD1 /* powerUp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = powerUp.wav; sourceTree = "<group>"; };
+		B4C8D3622161CE3200AAEBD1 /* move.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = move.wav; sourceTree = "<group>"; };
+		B4C8D3632161CE3200AAEBD1 /* levelCompleted.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = levelCompleted.wav; sourceTree = "<group>"; };
+		B4C8D3642161CE3200AAEBD1 /* fail.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = fail.wav; sourceTree = "<group>"; };
+		B4C8D3652161CE3200AAEBD1 /* levelUp.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = levelUp.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +70,7 @@
 		B4C8D3472161CD9500AAEBD1 /* ColorTrek */ = {
 			isa = PBXGroup;
 			children = (
+				B4C8D3602161CE3200AAEBD1 /* Sounds */,
 				B4C8D3482161CD9500AAEBD1 /* AppDelegate.swift */,
 				B4C8D34A2161CD9500AAEBD1 /* GameScene.sks */,
 				B4C8D34C2161CD9500AAEBD1 /* Actions.sks */,
@@ -71,6 +82,18 @@
 				B4C8D35A2161CD9700AAEBD1 /* Info.plist */,
 			);
 			path = ColorTrek;
+			sourceTree = "<group>";
+		};
+		B4C8D3602161CE3200AAEBD1 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				B4C8D3612161CE3200AAEBD1 /* powerUp.wav */,
+				B4C8D3622161CE3200AAEBD1 /* move.wav */,
+				B4C8D3632161CE3200AAEBD1 /* levelCompleted.wav */,
+				B4C8D3642161CE3200AAEBD1 /* fail.wav */,
+				B4C8D3652161CE3200AAEBD1 /* levelUp.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -134,8 +157,13 @@
 				B4C8D3542161CD9600AAEBD1 /* Main.storyboard in Resources */,
 				B4C8D34B2161CD9500AAEBD1 /* GameScene.sks in Resources */,
 				B4C8D3562161CD9700AAEBD1 /* Assets.xcassets in Resources */,
+				B4C8D3682161CE3200AAEBD1 /* levelCompleted.wav in Resources */,
+				B4C8D36A2161CE3200AAEBD1 /* levelUp.wav in Resources */,
+				B4C8D3672161CE3200AAEBD1 /* move.wav in Resources */,
 				B4C8D3592161CD9700AAEBD1 /* LaunchScreen.storyboard in Resources */,
+				B4C8D3692161CE3200AAEBD1 /* fail.wav in Resources */,
 				B4C8D34D2161CD9500AAEBD1 /* Actions.sks in Resources */,
+				B4C8D3662161CE3200AAEBD1 /* powerUp.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
