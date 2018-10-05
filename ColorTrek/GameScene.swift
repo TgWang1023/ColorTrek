@@ -47,6 +47,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let playerCategory: UInt32 = 0x1 << 0
     let enemyCategory: UInt32 = 0x1 << 1
     let targetCategory: UInt32 = 0x1 << 2
+    let powerUpCategory: UInt32 = 0x1 << 3
     
     func createHUD() {
         timeLabel = self.childNode(withName: "time") as? SKLabelNode
@@ -72,7 +73,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player?.physicsBody?.linearDamping = 0
         player?.physicsBody?.categoryBitMask = playerCategory
         player?.physicsBody?.collisionBitMask = 0
-        player?.physicsBody?.contactTestBitMask = enemyCategory | targetCategory
+        player?.physicsBody?.contactTestBitMask = enemyCategory | targetCategory | powerUpCategory
         
         guard let playerPosition = tracksArr?.first?.position.x else {return}
         player?.position = CGPoint(x: playerPosition, y: self.size.height / 2)
@@ -115,11 +116,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         return enemySprite
     }
     
+    func createPowerUp(forTrack track: Int) -> SKSpriteNode? {
+        let powerUpSprite = SKSpriteNode(imageNamed: "powerUp")
+        powerUpSprite.name = "ENEMY"
+        
+        powerUpSprite.physicsBody = SKPhysicsBody.init(circleOfRadius: powerUpSprite.size.width / 2)
+        powerUpSprite.physicsBody?.linearDamping = 0
+        powerUpSprite.physicsBody?.categoryBitMask = powerUpCategory
+        powerUpSprite.physicsBody?.collisionBitMask = 0
+        
+        let up = directionArray[track]
+        guard let powerUpXPosition = tracksArr?[track].position.x else {return nil}
+        
+        powerUpSprite.position.x = powerUpXPosition
+        powerUpSprite.position.y = up ? -130 : self.size.height + 130
+        
+        powerUpSprite.physicsBody?.velocity = up ? CGVector(dx: 0, dy: velocityArray[track]) : CGVector(dx: 0, dy: -velocityArray[track])
+        
+        return powerUpSprite
+    }
+    
     func spawnEnemies() {
+        
+        var randomTrackNumber = 0
+        let createPowerUp = GKRandomSource.sharedRandom().nextBool()
+        
+        if createPowerUp {
+            randomTrackNumber = GKRandomSource.sharedRandom().nextInt(upperBound: 6) + 1
+            if let powerUpObject = self.createPowerUp(forTrack: randomTrackNumber) {
+                self.addChild(powerUpObject)
+            }
+        }
+        
         for i in 1...7 {
-            let randomEnemyType = Enemies(rawValue: GKRandomSource.sharedRandom().nextInt(upperBound: 3))!
-            if let newEnemy = createEnemy(type: randomEnemyType, forTrack: i) {
-                self.addChild(newEnemy)
+            if randomTrackNumber != i {
+                let randomEnemyType = Enemies(rawValue: GKRandomSource.sharedRandom().nextInt(upperBound: 3))!
+                if let newEnemy = createEnemy(type: randomEnemyType, forTrack: i) {
+                    self.addChild(newEnemy)
+                }
             }
         }
         
@@ -140,6 +174,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func nextLevel(playerPhysicsBody: SKPhysicsBody) {
+        currentScore += 1
         self.run(SKAction.playSoundFileNamed("levelUp.wav", waitForCompletion: true))
         let emitter = SKEmitterNode(fileNamed: "fireworks.sks")
         playerPhysicsBody.node?.addChild(emitter!)
@@ -254,6 +289,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             movePlayerToStart()
         } else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == targetCategory {
             nextLevel(playerPhysicsBody: playerBody)
+        } else if playerBody.categoryBitMask == playerCategory && otherBody.categoryBitMask == powerUpCategory {
+            self.run(SKAction.playSoundFileNamed("powerUp.wav", waitForCompletion: true))
+            otherBody.node?.removeFromParent()
+            remainingTime += 5
         }
     }
     
@@ -262,6 +301,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if player.position.y > self.size.height || player.position.y < 0 {
                 movePlayerToStart()
             }
+        }
+        
+        if remainingTime <= 5 {
+            timeLabel?.fontColor = UIColor.red
         }
     }
     
