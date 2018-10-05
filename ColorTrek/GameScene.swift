@@ -21,6 +21,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var player: SKSpriteNode?
     var target: SKSpriteNode?
     
+    var timeLabel: SKLabelNode?
+    var scoreLabel: SKLabelNode?
+    var currentScore: Int = 0 {
+        didSet {
+            self.scoreLabel?.text = "Score: \(self.currentScore)"
+        }
+    }
+    var remainingTime: TimeInterval = 60 {
+        didSet {
+            self.timeLabel?.text = "Time: \(Int(self.remainingTime))"
+        }
+    }
+    
     var currentTrack = 0
     var movingToTrack = false
     
@@ -34,6 +47,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let playerCategory: UInt32 = 0x1 << 0
     let enemyCategory: UInt32 = 0x1 << 1
     let targetCategory: UInt32 = 0x1 << 2
+    
+    func createHUD() {
+        timeLabel = self.childNode(withName: "time") as? SKLabelNode
+        scoreLabel = self.childNode(withName: "score") as? SKLabelNode
+        
+        remainingTime = 60
+        currentScore = 0
+    }
     
     func setUpTracks() {
         for i in 0...8 {
@@ -130,6 +151,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         setUpTracks()
+        createHUD()
+        launchGameTimer()
         createPlayer()
         createTarget()
         
@@ -151,6 +174,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.run(SKAction.repeatForever(SKAction.sequence([SKAction.run {
             self.spawnEnemies()
             }, SKAction.wait(forDuration: 2)])))
+    }
+    
+    func launchGameTimer() {
+        let timeAction = SKAction.repeatForever(SKAction.sequence([SKAction.run({self.remainingTime -= 1}), SKAction.wait(forDuration: 1)]))
+        timeLabel?.run(timeAction)
     }
     
     func moveVertically(up: Bool) {
