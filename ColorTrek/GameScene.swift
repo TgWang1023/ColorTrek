@@ -21,11 +21,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var player: SKSpriteNode?
     var target: SKSpriteNode?
     
+    var pause: SKSpriteNode?
     var timeLabel: SKLabelNode?
     var scoreLabel: SKLabelNode?
     var currentScore: Int = 0 {
         didSet {
             self.scoreLabel?.text = "Score: \(self.currentScore)"
+            GameHandler.sharedInstance.score = currentScore
         }
     }
     var remainingTime: TimeInterval = 60 {
@@ -50,6 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let powerUpCategory: UInt32 = 0x1 << 3
     
     func createHUD() {
+        pause = self.childNode(withName: "pause") as? SKSpriteNode
         timeLabel = self.childNode(withName: "time") as? SKLabelNode
         scoreLabel = self.childNode(withName: "score") as? SKLabelNode
         
@@ -184,6 +187,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func gameOver() {
+        GameHandler.sharedInstance.saveGameStats()
+        
+        self.run(SKAction.playSoundFileNamed("levelCompleted.wav", waitForCompletion: true))
+        let transition = SKTransition.fade(withDuration: 1)
+        if let gameOverScene = SKScene(fileNamed: "GameOverScene") {
+            gameOverScene.scaleMode = .aspectFit
+            self.view?.presentScene(gameOverScene, transition: transition)
+        }
+    }
+    
     override func didMove(to view: SKView) {
         setUpTracks()
         createHUD()
@@ -253,11 +267,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let location = touch.previousLocation(in: self)
             let node = self.nodes(at: location).first
             if node?.name == "right" {
-                moveToNextTrack()
+                if currentTrack < 8 {
+                    moveToNextTrack()
+                }
             } else if node?.name == "up" {
                 moveVertically(up: true)
             } else if node?.name == "down" {
                 moveVertically(up: false)
+            } else if node?.name == "pause", let scene = self.scene {
+                if scene.isPaused {
+                    scene.isPaused = false
+                } else {
+                    scene.isPaused = true
+                }
             }
         }
     }
@@ -305,6 +327,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if remainingTime <= 5 {
             timeLabel?.fontColor = UIColor.red
+        }
+        
+        if remainingTime == 0 {
+            gameOver()
         }
     }
     
